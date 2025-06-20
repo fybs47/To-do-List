@@ -1,0 +1,17 @@
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\DataAccess.deps.json
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\DataAccess.runtimeconfig.json
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\DataAccess.dll
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\DataAccess.pdb
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\Domain.dll
+C:\RiderProjects\To do List\DataAccess\bin\Debug\net9.0\Domain.pdb
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.csproj.AssemblyReference.cache
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.AssemblyInfoInputs.cache
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.AssemblyInfo.cs
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.csproj.CoreCompileInputs.cache
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.csproj.Up2Date
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.dll
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\refint\DataAccess.dll
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.pdb
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\DataAccess.genruntimeconfig.cache
+C:\RiderProjects\To do List\DataAccess\obj\Debug\net9.0\ref\DataAccess.dll

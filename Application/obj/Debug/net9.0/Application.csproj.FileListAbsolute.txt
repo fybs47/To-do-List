@@ -1,0 +1,15 @@
+C:\RiderProjects\To do List\Application\bin\Debug\net9.0\Application.deps.json
+C:\RiderProjects\To do List\Application\bin\Debug\net9.0\Application.dll
+C:\RiderProjects\To do List\Application\bin\Debug\net9.0\Application.pdb
+C:\RiderProjects\To do List\Application\bin\Debug\net9.0\Domain.dll
+C:\RiderProjects\To do List\Application\bin\Debug\net9.0\Domain.pdb
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.csproj.AssemblyReference.cache
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.AssemblyInfoInputs.cache
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.AssemblyInfo.cs
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.csproj.CoreCompileInputs.cache
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Applicat.44B5EDA2.Up2Date
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.dll
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\refint\Application.dll
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.pdb
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\ref\Application.dll
