@@ -1,11 +1,10 @@
 ﻿using Domain.Entities;
-
-namespace Domain.Interfaces;
+using Domain.Interfaces;
 
 public interface ITaskItemRepository : IBaseRepository<TaskItem>
 {
-    Task<IEnumerable<TaskItem>> GetTasksWithDetailsAsync();
-    Task<TaskItem?> GetByIdWithDetailsAsync(Guid id);
-    Task<IEnumerable<TaskItem>> GetTasksByUserAsync(Guid userId);
-    Task<IEnumerable<TaskItem>> GetOverdueTasksAsync();
+    Task<TaskItem?> GetByIdWithDetailsAsync(Guid id, CancellationToken cancellationToken = default);
+    IQueryable<TaskItem> GetQueryable();
+    Task<IEnumerable<TaskItem>> GetTasksByUserAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TaskItem>> GetOverdueTasksAsync(CancellationToken cancellationToken = default);
 }

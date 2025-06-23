@@ -1,7 +1,6 @@
-﻿namespace Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 public interface ITaskHistoryRepository : IBaseRepository<TaskHistory>
 {
-    Task<IEnumerable<TaskHistory>> GetHistoryForTaskAsync(Guid taskId);
-    Task AddHistoryRecordAsync(Guid taskId, string fieldName, string oldValue, string newValue, Guid userId);
+    Task<IEnumerable<TaskHistory>> GetHistoryForTaskAsync(Guid taskId, CancellationToken cancellationToken = default);
 }

@@ -1,53 +1,73 @@
 ﻿using System.Linq.Expressions;
+using DataAccess;
 using Domain.Entities;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Data.Repositories;
-
-public class CommentRepository(AppDbContext context) : ICommentRepository
+public class CommentRepository : ICommentRepository
 {
-    public async Task AddAsync(Comment entity)
+    private readonly AppDbContext _context;
+
+    public CommentRepository(AppDbContext context)
     {
-        await context.Comments.AddAsync(entity);
+        _context = context;
+    }
+
+    public async Task<Comment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Comments.FindAsync(new object[] { id }, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Comment>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Comments.ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Comment>> FindAsync(Expression<Func<Comment, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Comments.Where(predicate).ToListAsync(cancellationToken);
+    }
+
+    public async Task AddAsync(Comment entity, CancellationToken cancellationToken = default)
+    {
+        await _context.Comments.AddAsync(entity, cancellationToken);
+    }
+
+    public async Task AddRangeAsync(IEnumerable<Comment> entities, CancellationToken cancellationToken = default)
+    {
+        await _context.Comments.AddRangeAsync(entities, cancellationToken);
     }
 
     public void Update(Comment entity)
     {
-        context.Comments.Update(entity);
+        _context.Comments.Update(entity);
+    }
+
+    public void UpdateRange(IEnumerable<Comment> entities)
+    {
+        _context.Comments.UpdateRange(entities);
     }
 
     public void Remove(Comment entity)
     {
-        context.Comments.Remove(entity);
+        _context.Comments.Remove(entity);
     }
 
-    public async Task SaveChangesAsync()
+    public void RemoveRange(IEnumerable<Comment> entities)
     {
-        await context.SaveChangesAsync();
+        _context.Comments.RemoveRange(entities);
     }
 
-    public async Task<Comment> GetByIdAsync(Guid id)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return (await (context.Comments.FindAsync(id)))!;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Comment>> GetAllAsync()
+    public async Task<IEnumerable<Comment>> GetCommentsForTaskAsync(Guid taskId, CancellationToken cancellationToken = default)
     {
-        return await context.Comments.ToListAsync();
-    }
-
-    public async Task<IEnumerable<Comment>> FindAsync(Expression<Func<Comment, bool>> predicate)
-    {
-        return await context.Comments.Where(predicate).ToListAsync();
-    }
-
-    public async Task<IEnumerable<Comment>> GetCommentsForTaskAsync(Guid taskId)
-    {
-        return await context.Comments
+        return await _context.Comments
             .Where(c => c.TaskId == taskId)
             .Include(c => c.Author)
             .OrderByDescending(c => c.CreatedAt)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

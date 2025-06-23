@@ -1,46 +1,66 @@
-﻿using System.Linq.Expressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace DataAccess.Data.Repositories;
-
-public abstract class BaseRepository<T>(AppDbContext context) : IBaseRepository<T>
-    where T : class
+namespace DataAccess.Data.Repositories
 {
-    private readonly DbSet<T> _dbSet = context.Set<T>();
-
-    public async Task<T> GetByIdAsync(Guid id)
+    public abstract class BaseRepository<T>(AppDbContext context) : IBaseRepository<T>
+        where T : class
     {
-        return (await _dbSet.FindAsync(id))!;
-    }
+        private readonly DbSet<T> _dbSet = context.Set<T>();
 
-    public async Task<IEnumerable<T>> GetAllAsync()
-    {
-        return await _dbSet.ToListAsync();
-    }
+        public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
+        }
 
-    public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-    {
-        return await _dbSet.Where(predicate).ToListAsync();
-    }
+        public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.ToListAsync(cancellationToken);
+        }
 
-    public async Task AddAsync(T entity)
-    {
-        await _dbSet.AddAsync(entity);
-    }
+        public async Task<IEnumerable<T>> FindAsync(
+            Expression<Func<T, bool>> predicate, 
+            CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
+        }
 
-    public void Update(T entity)
-    {
-        _dbSet.Update(entity);
-    }
+        public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            await _dbSet.AddAsync(entity, cancellationToken);
+        }
 
-    public void Remove(T entity)
-    {
-        _dbSet.Remove(entity);
-    }
+        public async Task AddRangeAsync(
+            IEnumerable<T> entities, 
+            CancellationToken cancellationToken = default)
+        {
+            await _dbSet.AddRangeAsync(entities, cancellationToken);
+        }
 
-    public async Task SaveChangesAsync()
-    {
-        await context.SaveChangesAsync();
+        public void Update(T entity)
+        {
+            _dbSet.Update(entity);
+        }
+
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            _dbSet.UpdateRange(entities);
+        }
+
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

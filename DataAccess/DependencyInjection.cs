@@ -1,5 +1,4 @@
 ﻿using DataAccess.Data.Repositories;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,5 +18,6 @@ public static class ServiceExtensions
         services.AddScoped<ITaskItemRepository, TaskItemRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ITaskHistoryRepository, TaskHistoryRepository>();
+        services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
     }
 }

@@ -1,78 +1,94 @@
 ﻿using System.Linq.Expressions;
+using DataAccess;
 using Domain.Entities;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 using TaskStatus = Domain.Enums.TaskStatus;
-
-namespace DataAccess.Data.Repositories;
-
-public class TaskItemRepository(AppDbContext context) : ITaskItemRepository
+public class TaskItemRepository : ITaskItemRepository
 {
-    public async Task AddAsync(TaskItem entity)
+    private readonly AppDbContext _context;
+
+    public TaskItemRepository(AppDbContext context)
     {
-        await context.Tasks.AddAsync(entity);
+        _context = context;
+    }
+
+    public async Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Tasks.FindAsync(new object[] { id }, cancellationToken);
+    }
+
+    public async Task<IEnumerable<TaskItem>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Tasks.ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<TaskItem>> FindAsync(Expression<Func<TaskItem, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Tasks.Where(predicate).ToListAsync(cancellationToken);
+    }
+
+    public async Task AddAsync(TaskItem entity, CancellationToken cancellationToken = default)
+    {
+        await _context.Tasks.AddAsync(entity, cancellationToken);
+    }
+
+    public async Task AddRangeAsync(IEnumerable<TaskItem> entities, CancellationToken cancellationToken = default)
+    {
+        await _context.Tasks.AddRangeAsync(entities, cancellationToken);
     }
 
     public void Update(TaskItem entity)
     {
-        context.Tasks.Update(entity);
+        _context.Tasks.Update(entity);
+    }
+
+    public void UpdateRange(IEnumerable<TaskItem> entities)
+    {
+        _context.Tasks.UpdateRange(entities);
     }
 
     public void Remove(TaskItem entity)
     {
-        context.Tasks.Remove(entity);
+        _context.Tasks.Remove(entity);
     }
 
-    public async Task SaveChangesAsync()
+    public void RemoveRange(IEnumerable<TaskItem> entities)
     {
-        await context.SaveChangesAsync();
+        _context.Tasks.RemoveRange(entities);
     }
 
-    public async Task<TaskItem> GetByIdAsync(Guid id)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return (await context.Tasks.FindAsync(id))!;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TaskItem>> GetAllAsync()
+    public async Task<TaskItem?> GetByIdWithDetailsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.Tasks.ToListAsync();
-    }
-
-    public async Task<IEnumerable<TaskItem>> FindAsync(Expression<Func<TaskItem, bool>> predicate)
-    {
-        return await context.Tasks.Where(predicate).ToListAsync();
-    }
-
-    public async Task<IEnumerable<TaskItem>> GetTasksWithDetailsAsync()
-    {
-        return await context.Tasks
-            .Include(t => t.Creator)
-            .Include(t => t.Assignee)
-            .Include(t => t.Comments)
-            .ToListAsync();
-    }
-
-    public async Task<TaskItem?> GetByIdWithDetailsAsync(Guid id)
-    {
-        return await context.Tasks
+        return await _context.Tasks
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
             .Include(t => t.Comments)
             .Include(t => t.TaskHistories)
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<TaskItem>> GetTasksByUserAsync(Guid userId)
+    public IQueryable<TaskItem> GetQueryable()
     {
-        return await context.Tasks
+        return _context.Tasks.AsQueryable();
+    }
+
+    public async Task<IEnumerable<TaskItem>> GetTasksByUserAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Tasks
             .Where(t => t.CreatorId == userId || t.AssigneeId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TaskItem>> GetOverdueTasksAsync()
+    public async Task<IEnumerable<TaskItem>> GetOverdueTasksAsync(CancellationToken cancellationToken = default)
     {
-        return await context.Tasks
-            .Where(t => t.DueDate.HasValue && t.DueDate < DateTime.UtcNow && t.Status != TaskStatus.Completed)
-            .ToListAsync();
+        return await _context.Tasks
+            .Where(t => t.DueDate < DateTime.UtcNow && t.Status != TaskStatus.Completed)
+            .ToListAsync(cancellationToken);
     }
 }

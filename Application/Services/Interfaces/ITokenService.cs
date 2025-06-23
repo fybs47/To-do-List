@@ -8,6 +8,6 @@ public interface ITokenService
 {
     AuthResponseDto GenerateTokens(User user);
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
-    string GeneratePasswordResetToken(User user);
-    Guid ValidatePasswordResetToken(string token);
+    Task<string> GeneratePasswordResetTokenAsync(User user, CancellationToken cancellationToken = default);
+    Task<Guid> ValidatePasswordResetTokenAsync(string token, CancellationToken cancellationToken = default);
 }

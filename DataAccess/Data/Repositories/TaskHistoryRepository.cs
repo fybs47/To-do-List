@@ -1,66 +1,72 @@
 ﻿using System.Linq.Expressions;
-using Domain.Interfaces;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Data.Repositories;
-
-public class TaskHistoryRepository(AppDbContext context) : ITaskHistoryRepository
+public class TaskHistoryRepository : ITaskHistoryRepository
 {
-    public async Task AddAsync(TaskHistory entity)
+    private readonly AppDbContext _context;
+
+    public TaskHistoryRepository(AppDbContext context)
     {
-        await context.TaskHistories.AddAsync(entity);
+        _context = context;
+    }
+
+    public async Task<TaskHistory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.TaskHistories.FindAsync(new object[] { id }, cancellationToken);
+    }
+
+    public async Task<IEnumerable<TaskHistory>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.TaskHistories.ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<TaskHistory>> FindAsync(Expression<Func<TaskHistory, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _context.TaskHistories.Where(predicate).ToListAsync(cancellationToken);
+    }
+
+    public async Task AddAsync(TaskHistory entity, CancellationToken cancellationToken = default)
+    {
+        await _context.TaskHistories.AddAsync(entity, cancellationToken);
+    }
+
+    public async Task AddRangeAsync(IEnumerable<TaskHistory> entities, CancellationToken cancellationToken = default)
+    {
+        await _context.TaskHistories.AddRangeAsync(entities, cancellationToken);
     }
 
     public void Update(TaskHistory entity)
     {
-        context.TaskHistories.Update(entity);
+        _context.TaskHistories.Update(entity);
+    }
+
+    public void UpdateRange(IEnumerable<TaskHistory> entities)
+    {
+        _context.TaskHistories.UpdateRange(entities);
     }
 
     public void Remove(TaskHistory entity)
     {
-        context.TaskHistories.Remove(entity);
+        _context.TaskHistories.Remove(entity);
     }
 
-    public async Task SaveChangesAsync()
+    public void RemoveRange(IEnumerable<TaskHistory> entities)
     {
-        await context.SaveChangesAsync();
+        _context.TaskHistories.RemoveRange(entities);
     }
 
-    public async Task<TaskHistory> GetByIdAsync(Guid id)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return (await context.TaskHistories.FindAsync(id))!;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TaskHistory>> GetAllAsync()
+    public async Task<IEnumerable<TaskHistory>> GetHistoryForTaskAsync(Guid taskId, CancellationToken cancellationToken = default)
     {
-        return await context.TaskHistories.ToListAsync();
-    }
-
-    public async Task<IEnumerable<TaskHistory>> FindAsync(Expression<Func<TaskHistory, bool>> predicate)
-    {
-        return await context.TaskHistories.Where(predicate).ToListAsync();
-    }
-
-    public async Task<IEnumerable<TaskHistory>> GetHistoryForTaskAsync(Guid taskId)
-    {
-        return await context.TaskHistories
+        return await _context.TaskHistories
             .Where(h => h.TaskId == taskId)
             .Include(h => h.ChangedByUser)
             .OrderByDescending(h => h.ChangedAt)
-            .ToListAsync();
-    }
-
-    public async Task AddHistoryRecordAsync(Guid taskId, string fieldName, string oldValue, string newValue, Guid userId)
-    {
-        var history = new TaskHistory
-        {
-            TaskId = taskId,
-            ChangedField = fieldName,
-            OldValue = oldValue,
-            NewValue = newValue,
-            ChangedByUserId = userId
-        };
-
-        await context.TaskHistories.AddAsync(history);
+            .ToListAsync(cancellationToken);
     }
 }

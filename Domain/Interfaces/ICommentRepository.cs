@@ -1,8 +1,7 @@
 ﻿using Domain.Entities;
-
-namespace Domain.Interfaces;
+using Domain.Interfaces;
 
 public interface ICommentRepository : IBaseRepository<Comment>
 {
-    Task<IEnumerable<Comment>> GetCommentsForTaskAsync(Guid taskId);
+    Task<IEnumerable<Comment>> GetCommentsForTaskAsync(Guid taskId, CancellationToken cancellationToken = default);
 }

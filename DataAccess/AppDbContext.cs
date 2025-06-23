@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<TaskItem> Tasks { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<TaskHistory> TaskHistories { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
