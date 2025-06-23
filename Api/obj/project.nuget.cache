@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "hpBx4MjVWGc=",
+  "dgSpecHash": "QYr+kW/csPs=",
   "success": true,
   "projectFilePath": "C:\\RiderProjects\\To do List\\Api\\Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Дрюс\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
     "C:\\Users\\Дрюс\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\Дрюс\\.nuget\\packages\\csvhelper\\33.1.0\\csvhelper.33.1.0.nupkg.sha512",
     "C:\\Users\\Дрюс\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
+    "C:\\Users\\Дрюс\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
     "C:\\Users\\Дрюс\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Дрюс\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.6\\microsoft.aspnetcore.authentication.jwtbearer.9.0.6.nupkg.sha512",
     "C:\\Users\\Дрюс\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.1\\microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",

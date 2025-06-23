@@ -154,3 +154,4 @@ C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Microsoft.Extensions.Diagnostic
 C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
 C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Abstractions.dll
 C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\RiderProjects\To do List\Api\obj\Debug\net9.0\Api.sourcelink.json

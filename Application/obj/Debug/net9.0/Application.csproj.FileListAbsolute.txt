@@ -13,3 +13,4 @@ C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.dll
 C:\RiderProjects\To do List\Application\obj\Debug\net9.0\refint\Application.dll
 C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.pdb
 C:\RiderProjects\To do List\Application\obj\Debug\net9.0\ref\Application.dll
+C:\RiderProjects\To do List\Application\obj\Debug\net9.0\Application.sourcelink.json

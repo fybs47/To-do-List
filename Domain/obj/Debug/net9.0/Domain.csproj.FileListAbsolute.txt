@@ -9,3 +9,4 @@ C:\RiderProjects\To do List\Domain\obj\Debug\net9.0\Domain.dll
 C:\RiderProjects\To do List\Domain\obj\Debug\net9.0\refint\Domain.dll
 C:\RiderProjects\To do List\Domain\obj\Debug\net9.0\Domain.pdb
 C:\RiderProjects\To do List\Domain\obj\Debug\net9.0\ref\Domain.dll
+C:\RiderProjects\To do List\Domain\obj\Debug\net9.0\Domain.sourcelink.json
