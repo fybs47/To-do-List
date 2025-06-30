@@ -14,7 +14,7 @@ public class PasswordResetTokenRepository : IPasswordResetTokenRepository
 
     public async Task<PasswordResetToken?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.PasswordResetTokens.FindAsync(new object[] { id }, cancellationToken);
+        return await _context.PasswordResetTokens.FindAsync([id], cancellationToken);
     }
 
     public async Task<IEnumerable<PasswordResetToken>> GetAllAsync(CancellationToken cancellationToken = default)

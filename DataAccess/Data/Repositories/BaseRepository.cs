@@ -8,10 +8,12 @@ namespace DataAccess.Data.Repositories
         where T : class
     {
         private readonly DbSet<T> _dbSet = context.Set<T>();
-
+        //AsNoTracking добавить
+        //Не возвращать методы IQueryable из репозитория 
+       
         public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
+            return await _dbSet.FindAsync([id], cancellationToken);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)

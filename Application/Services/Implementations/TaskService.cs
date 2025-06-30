@@ -6,8 +6,6 @@ using Application.Helpers;
 using Application.Services.Interfaces;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Enums;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TaskStatus = Domain.Enums.TaskStatus;

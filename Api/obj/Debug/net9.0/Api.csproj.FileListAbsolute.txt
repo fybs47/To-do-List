@@ -157,3 +157,4 @@ C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Microsoft.Extensions.Hosting.Ab
 C:\RiderProjects\To do List\Api\obj\Debug\net9.0\Api.sourcelink.json
 C:\RiderProjects\To do List\Api\bin\Debug\net9.0\CsvHelper.dll
 C:\RiderProjects\To do List\Api\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\RiderProjects\To do List\Api\bin\Debug\net9.0\Scrutor.dll

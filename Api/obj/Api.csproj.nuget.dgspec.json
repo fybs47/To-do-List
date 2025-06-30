@@ -181,6 +181,10 @@
               "target": "Package",
               "version": "[9.0.6, )"
             },
+            "Scrutor": {
+              "target": "Package",
+              "version": "[6.1.0, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.0.1, )"

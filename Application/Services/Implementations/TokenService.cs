@@ -5,45 +5,69 @@ using System.Text;
 using Application.DTOs.Auth;
 using Application.Exceptions;
 using Application.Services.Interfaces;
+using Application.Settings;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Services.Implementations
 {
     public class TokenService : ITokenService
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
         private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
         private readonly TimeSpan _resetTokenExpiration = TimeSpan.FromHours(1);
-        private readonly TimeSpan _refreshTokenExpiration = TimeSpan.FromDays(7);
 
         public TokenService(
-            IConfiguration configuration,
+            IOptions<JwtSettings> jwtSettings,
             IPasswordResetTokenRepository passwordResetTokenRepository)
         {
-            _configuration = configuration;
+            _jwtSettings = jwtSettings.Value;
             _passwordResetTokenRepository = passwordResetTokenRepository;
+            
+            ValidateJwtSettings();
+        }
+
+        private void ValidateJwtSettings()
+        {
+            if (string.IsNullOrEmpty(_jwtSettings.Key))
+                throw new InvalidOperationException("JWT Key is not configured");
+            
+            if (string.IsNullOrEmpty(_jwtSettings.Issuer))
+                throw new InvalidOperationException("JWT Issuer is not configured");
+            
+            if (string.IsNullOrEmpty(_jwtSettings.Audience))
+                throw new InvalidOperationException("JWT Audience is not configured");
+            
+            if (_jwtSettings.ExpiryInMinutes <= 0)
+                throw new InvalidOperationException("JWT ExpiryInMinutes must be greater than 0");
+            
+            if (_jwtSettings.RefreshTokenExpiryInDays <= 0)
+                throw new InvalidOperationException("JWT RefreshTokenExpiryInDays must be greater than 0");
         }
 
         public AuthResponseDto GenerateTokens(User user)
         {
             var accessToken = GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
-            
+    
             return new AuthResponseDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(accessToken),
                 RefreshToken = refreshToken,
                 Expiration = accessToken.ValidTo,
-                RefreshTokenExpiration = DateTime.UtcNow.Add(_refreshTokenExpiration)
+                RefreshTokenExpiration = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpiryInDays),
+        
+                UserId = user.Id,
+                Username = user.Username,
+                Role = user.Role
             };
         }
 
         private JwtSecurityToken GenerateJwtToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -55,10 +79,10 @@ namespace Application.Services.Implementations
             };
 
             return new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"])),
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryInMinutes),
                 signingCredentials: credentials
             );
         }
@@ -75,10 +99,12 @@ namespace Application.Services.Implementations
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
+                ValidateAudience = true,
+                ValidAudience = _jwtSettings.Audience,
+                ValidateIssuer = true,
+                ValidIssuer = _jwtSettings.Issuer,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
                 ValidateLifetime = false
             };
 
@@ -96,10 +122,8 @@ namespace Application.Services.Implementations
 
         public async Task<string> GeneratePasswordResetTokenAsync(User user, CancellationToken cancellationToken = default)
         {
-            // Инвалидируем предыдущие токены пользователя
             await _passwordResetTokenRepository.InvalidateUserTokensAsync(user.Id, cancellationToken);
             
-            // Генерируем новый токен
             var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
             
             var resetToken = new PasswordResetToken

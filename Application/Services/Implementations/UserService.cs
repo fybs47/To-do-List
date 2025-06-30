@@ -3,9 +3,7 @@ using Application.DTOs.Users;
 using Application.Exceptions;
 using Application.Services.Interfaces;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Enums;
-using Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Implementations
@@ -91,7 +89,6 @@ namespace Application.Services.Implementations
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken) 
                 ?? throw new NotFoundException("User not found");
             
-            // Только администратор может менять статус
             var currentUser = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
             if (currentUser?.Role != Role.Admin)
             {

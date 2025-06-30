@@ -13,7 +13,7 @@ public class TaskHistoryRepository : ITaskHistoryRepository
 
     public async Task<TaskHistory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.TaskHistories.FindAsync(new object[] { id }, cancellationToken);
+        return await _context.TaskHistories.FindAsync([id], cancellationToken);
     }
 
     public async Task<IEnumerable<TaskHistory>> GetAllAsync(CancellationToken cancellationToken = default)

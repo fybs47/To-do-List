@@ -1,10 +1,11 @@
-﻿using DataAccess;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TaskStatus = Domain.Enums.TaskStatus;
+
+namespace DataAccess;
 
 public static class SeedData
 {
